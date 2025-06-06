@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Choose Your Gift Box</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2&display=swap');
+
+    body {
+      font-family: 'Baloo 2', cursive;
+      background: linear-gradient(135deg, #fceabb, #f8b500);
+      text-align: center;
+      padding: 50px;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #fff;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .box {
+      display: inline-block;
+      margin: 20px;
+      padding: 20px;
+      width: 160px;
+      height: 160px;
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: transform 0.4s ease, background-color 0.4s;
+      position: relative;
+      animation: popIn 0.6s ease forwards;
+    }
+
+    .box:hover {
+      transform: scale(1.1) rotate(1deg);
+      background-color: #e0f7fa;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🏁 Choose Your Gift Box 🏁</h1>
+
+  <div id="Masters" class="box" onclick="unlockBox('Masters', '0001', 'Psalms 34:18')">Masters</div>
+  <div id="Naphtali" class="box" onclick="unlockBox('Naphtali', '0002', 'Hebrews 11:6')">Naphtali</div>
+  <div id="Staneley" class="box" onclick="unlockBox('Staneley', '0003', 'Mark 11:24')">Staneley</div>
+  <div id="Faith" class="box" onclick="unlockBox('Faith', '0004', 'Psalms 37:5')">Faith</div>
+  <div id="Albert" class="box" onclick="unlockBox('Albert', '0005', 'Matthew 17:20')">Albert</div>
+
+  <audio id="openSound" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
+  <audio id="errorSound" src="https://www.soundjay.com/buttons/sounds/button-16.mp3"></audio>
+
+  <script>
+    function unlockBox(boxId, correctPassword, verse) {
+      const alreadyOpened = localStorage.getItem(boxId + '_opened');
+      if (alreadyOpened) {
+        alert("This box has already been opened.");
+        return;
+      }
+      const password = prompt("Enter the password to open this box:");
+      if (password === correctPassword) {
+        document.getElementById("openSound").play();
+        alert("🎉 Scripture Revealed: " + verse);
+        localStorage.setItem(boxId + '_opened', true);
+        document.getElementById(boxId).style.display = 'none';
+      } else {
+        document.getElementById("errorSound").play();
+        alert("❌ Wrong password. Try again.");
+      }
+    }
+
+    // Hide already opened boxes on page load
+    window.onload = function() {
+      ['Masters', 'Naphtali', 'Staneley', 'Faith', 'Albert'].forEach(function(id) {
+        if (localStorage.getItem(id + '_opened')) {
+          const el = document.getElementById(id);
+          if (el) el.style.display = 'none';
+        }
+      });
+    };
+  </script>
+</body>
+</html>
